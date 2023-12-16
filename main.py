@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import messagebox
 from tkinter import *
 
@@ -6,17 +7,55 @@ clicked = True
 winner_1 = False
 winner_2 = False
 
+with open("points.css", mode="r") as file_data:
+    points = file_data.read()
+
+    player1_points = int("".join(points[0]))
+    player2_points = int("".join(points[2]))
+
+
+# _________________________Reset Points_________________________>
+
+def reset_points():
+    global player1_points, player2_points
+    player1_points = 0
+    player2_points = 0
+    p1_point_lb.config(text="0")
+    p2_point_lb.config(text="0")
+
+
 # _________________________Game_________________________>
 windows = Tk()
 windows.minsize(width=565, height=600)
 windows.title("Tik Tak Toe Game")
+windows.iconbitmap("icon.ico")
 windows.config(bg='#99C4C8', highlightthickness=4, highlightcolor="#68A7AD")
+canvas = Canvas(width=90, height=90, highlightthickness=0, bg='#99C4C8')
+canvas2 = Canvas(width=90, height=90, highlightthickness=0, bg='#99C4C8')
+
+image = tkinter.PhotoImage(file="user_img.jpg")
+canvas.create_image(43, 40, image=image)
+canvas.place(x=76, y=440)
+user_lb = Label(text="Player X", bg="#99C4C8", fg="white", font=('Elephant', 10, "normal"))
+user_lb.place(x=138, y=470)
+
+p1_point_lb = Label(text=f"{player1_points}", bg="#99C4C8", fg="white", font=('Elephant', 30, "normal"))
+p1_point_lb.place(x=138, y=500)
+
+canvas2.create_image(43, 40, image=image)
+canvas2.place(x=340, y=440)
+user_lb = Label(text="Player O", bg="#99C4C8", fg="white", font=('Elephant', 10, "normal"))
+user_lb.place(x=403, y=470)
+
+p2_point_lb = Label(text=f"{player2_points}", bg="#99C4C8", fg="white", font=('Elephant', 30, "normal"))
+p2_point_lb.place(x=403, y=500)
 
 
 def game():
     global clicked, count
     clicked = True
     count = 1
+
     # _________________________Button selection_________________________>
     def b_click(b):
         global clicked, count
@@ -51,11 +90,22 @@ def game():
         btn_9.config(state=DISABLED)
 
     def winner(b1, b2, b3, player):
-        global clicked, count
+        global clicked, count, player1_points, player2_points
         b1.config(bg='green')
         b2.config(bg='green')
         b3.config(bg='green')
         situation_lb.config(text=f"player {player} won!!", fg="green")
+        if player == 1:
+            player1_points += 1
+            p1_point_lb.config(text=f"{player1_points}")
+
+        elif player == 2:
+            player2_points += 1
+            p2_point_lb.config(text=f"{player2_points}")
+
+        with open("points.css", mode="w") as file:
+            file.write(f"{player1_points},{player2_points}")
+
         situation_lb.place(x=180, y=20)
         disable_buttons()
         clicked = True
@@ -147,6 +197,9 @@ def game():
 
     play_btn = Button(text='Play again', bg="#CD3131", fg="#F6F6F6", command=game, font=('Elephant', 12, "normal"))
     play_btn.place(x=225, y=460)
+
+    reset_btn = Button(text='Reset', bg="#CD3131", fg="#F6F6F6", command=reset_points, font=('Elephant', 8, "normal"))
+    reset_btn.place(x=248, y=510)
 
     windows.mainloop()
 
