@@ -7,21 +7,36 @@ clicked = True
 winner_1 = False
 winner_2 = False
 
+
 with open("points.css", mode="r") as file_data:
     points = file_data.read()
 
-    player1_points = int("".join(points[0]))
-    player2_points = int("".join(points[2]))
+    player1_points = int(''.join(points[0]))
+    player2_points = int(''.join(points[2]))
 
 
 # _________________________Reset Points_________________________>
 
 def reset_points():
     global player1_points, player2_points
-    player1_points = 0
-    player2_points = 0
-    p1_point_lb.config(text="0")
-    p2_point_lb.config(text="0")
+
+    with open("points.css", mode="r") as df:
+        point = df.read()
+        print(type(point[0]))
+        if point[0] == '0' and point[2] == '0':
+            messagebox.showinfo('Tic Tak Toe', "The game is already resat")
+            return
+
+        elif messagebox.askyesno('Tic Tak Toe', "Do you really want to reset the points?"):
+            with open("points.css", mode="w") as d_file:
+                d_file.write(f"{0},{0}")
+            player1_points = 0
+            player2_points = 0
+            p1_point_lb.config(text="0")
+            p2_point_lb.config(text="0")
+            game(False)
+        else:
+            return
 
 
 # _________________________Game_________________________>
@@ -51,16 +66,22 @@ p2_point_lb = Label(text=f"{player2_points}", bg="#99C4C8", fg="white", font=('E
 p2_point_lb.place(x=403, y=500)
 
 
-def game():
+def game(again):
     global clicked, count
+    if count == 1:
+        pass
+
+    elif again is True:
+        if not messagebox.askyesno("Tik Tak Toe", "Do you really want to start over?"):
+            return
+
+
     clicked = True
     count = 1
 
     # _________________________Button selection_________________________>
     def b_click(b):
         global clicked, count
-        print(count)
-
         if not b['text'] == " ":
             messagebox.showerror("Tic Tak Toe", "OPS!!!\nIt is already selected chose another one.")
 
@@ -115,7 +136,7 @@ def game():
         else:
             situation_lb.config(text=" ")
             count = 1
-            game()
+            game(False)
         return True
 
     # _________________________Conditions_________________________>
@@ -165,13 +186,11 @@ def game():
             count = 1
             disable_buttons()
             clicked = True
+            game(False)
 
     # _________________________Labels_________________________>
     situation_lb = Label(text="Tic Tak Toe", background="#99C4C8", fg='#424242', font=('Elephant', 20, "normal"))
     situation_lb.place(x=200, y=20)
-
-    lets_play_lb = Label(text="Lets Play", background="#F87D42", fg='white', font=('Josefin Sans', 20, "bold"))
-    # lets_play_lb.place(x=215, y=20)
 
     # _________________________Buttons_________________________>
     btn_1 = Button(text=' ', bg="#424242", width=12, height=6, command=lambda: b_click(btn_1))
@@ -195,13 +214,14 @@ def game():
     btn_9 = Button(text=' ', bg="#424242", width=12, height=6, command=lambda: b_click(btn_9))
     btn_9.place(x=360, y=320)
 
-    play_btn = Button(text='Play again', bg="#CD3131", fg="#F6F6F6", command=game, font=('Elephant', 12, "normal"))
-    play_btn.place(x=225, y=460)
+    play_btn = Button(text='Play again', bg="#CD3131", fg="#F6F6F6", command=lambda: game(again=True), font=('Elephant', 12, "normal"),
+                      padx=15)
+    play_btn.place(x=215, y=460)
 
     reset_btn = Button(text='Reset', bg="#CD3131", fg="#F6F6F6", command=reset_points, font=('Elephant', 8, "normal"))
-    reset_btn.place(x=248, y=510)
+    reset_btn.place(x=255, y=510)
 
     windows.mainloop()
 
 
-game()
+game(again=False)
