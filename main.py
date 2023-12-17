@@ -1,3 +1,4 @@
+import random
 import tkinter
 from tkinter import messagebox
 from tkinter import *
@@ -8,6 +9,18 @@ count = 1
 clicked = True
 winner_1 = False
 winner_2 = False
+computer_player = True
+random_btn = 0
+
+
+def level(num):
+    global random_btn, count, clicked
+    print(f' condition {num} done\nbtn num: {random_btn}')
+    random_btn['text'] = "O"
+    random_btn['bg'] = "#87E5DA"
+    count += 1
+    clicked = True
+
 
 if not os.path.isfile("points.csv"):
     dic = [{'player1': 0, "player2": 0}]
@@ -86,7 +99,8 @@ def game(again):
 
     # _________________________Button selection_________________________>
     def b_click(b):
-        global clicked, count
+        global clicked, count, computer_player, random_btn
+
         if not b['text'] == " ":
             messagebox.showerror("Tic Tak Toe", "OPS!!!\nIt is already selected chose another one.")
 
@@ -96,6 +110,126 @@ def game(again):
             clicked = False
             count += 1
             conditions()
+
+            if computer_player and clicked is False:
+                btn_list = [btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9]
+                # ------------------------Row One-------------------------->
+                if btn_3["text"] == 'X' and btn_2["text"] == 'X' and btn_1["text"] == ' ':
+                    random_btn = btn_list[0]
+                    level(1)
+                    conditions()
+                elif btn_1["text"] == 'X' and btn_3["text"] == 'X' and btn_2["text"] == ' ':
+                    random_btn = btn_list[1]
+                    level(2)
+                    conditions()
+                elif btn_1["text"] == 'X' and btn_2["text"] == 'X' and btn_3["text"] == ' ':
+                    random_btn = btn_list[2]
+                    level(3)
+                    conditions()
+                # ------------------------Row two-------------------------->
+                elif btn_6["text"] == 'X' and btn_5["text"] == 'X' and btn_4["text"] == ' ':
+                    random_btn = btn_list[3]
+                    level(4)
+                    conditions()
+                elif btn_6["text"] == 'X' and btn_4["text"] == 'X' and btn_5["text"] == ' ':
+                    random_btn = btn_list[4]
+                    level(5)
+                    conditions()
+                elif btn_4["text"] == 'X' and btn_5["text"] == 'X' and btn_6["text"] == ' ':
+                    random_btn = btn_list[5]
+                    level(6)
+                    conditions()
+                # ------------------------Row Three-------------------------->
+                elif btn_9["text"] == 'X' and btn_8["text"] == 'X' and btn_7["text"] == ' ':
+                    random_btn = btn_list[6]
+                    level(7)
+                    conditions()
+                elif btn_9["text"] == 'X' and btn_7["text"] == 'X' and btn_8["text"] == ' ':
+                    random_btn = btn_list[7]
+                    level(8)
+                    conditions()
+                elif btn_8["text"] == 'X' and btn_7["text"] == 'X' and btn_9["text"] == ' ':
+                    random_btn = btn_list[8]
+                    level(9)
+                    conditions()
+                # ------------------------Column One-------------------------->
+                elif btn_1["text"] == 'X' and btn_4["text"] == 'X' and btn_7["text"] == ' ':
+                    random_btn = btn_list[6]
+                    level(10)
+                    conditions()
+                elif btn_1["text"] == 'X' and btn_7["text"] == 'X' and btn_4["text"] == ' ':
+                    random_btn = btn_list[3]
+                    level(11)
+                    conditions()
+                elif btn_4["text"] == 'X' and btn_7["text"] == 'X' and btn_1["text"] == ' ':
+                    random_btn = btn_list[0]
+                    level(12)
+                    conditions()
+                # ------------------------Column Two-------------------------->
+                elif btn_2["text"] == 'X' and btn_5["text"] == 'X' and btn_8["text"] == ' ':
+                    random_btn = btn_list[7]
+                    level(13)
+                    conditions()
+                elif btn_2["text"] == 'X' and btn_8["text"] == 'X' and btn_5["text"] == ' ':
+                    random_btn = btn_list[4]
+                    level(14)
+                    conditions()
+                elif btn_5["text"] == 'X' and btn_8["text"] == 'X' and btn_2["text"] == ' ':
+                    random_btn = btn_list[1]
+                    level(15)
+                    conditions()
+                # ------------------------Column Three-------------------------->
+                elif btn_3["text"] == 'X' and btn_6["text"] == 'X' and btn_9["text"] == ' ':
+                    random_btn = btn_list[8]
+                    level(16)
+                    conditions()
+                elif btn_3["text"] == 'X' and btn_9["text"] == 'X' and btn_6["text"] == ' ':
+                    random_btn = btn_list[5]
+                    level(17)
+                    conditions()
+                elif btn_9["text"] == 'X' and btn_6["text"] == 'X' and btn_3["text"] == ' ':
+                    random_btn = btn_list[1]
+                    level(18)
+                    conditions()
+                # ------------------------Column -------------------------->
+                elif btn_1["text"] == 'X' and btn_5["text"] == 'X' and btn_9["text"] == ' ':
+                    random_btn = btn_list[8]
+                    level(19)
+                    conditions()
+                elif btn_1["text"] == 'X' and btn_9["text"] == 'X' and btn_5["text"] == ' ':
+                    random_btn = btn_list[4]
+                    level(20)
+                    conditions()
+                elif btn_9["text"] == 'X' and btn_5["text"] == 'X' and btn_1["text"] == ' ':
+                    random_btn = btn_list[0]
+                    level(21)
+                    conditions()
+                # ------------------------Column -------------------------->
+                elif btn_3["text"] == 'X' and btn_5["text"] == 'X' and btn_7["text"] == ' ':
+                    random_btn = btn_list[6]
+                    level(22)
+                    conditions()
+                elif btn_3["text"] == 'X' and btn_7["text"] == 'X' and btn_5["text"] == ' ':
+                    random_btn = btn_list[4]
+                    level(23)
+                    conditions()
+                elif btn_7["text"] == 'X' and btn_5["text"] == 'X' and btn_3["text"] == ' ':
+                    random_btn = btn_list[2]
+                    level(24)
+                    conditions()
+                random_btn = btn_list[random.randint(0, 8)]
+                while not random_btn['text'] == " ":
+                    random_btn = btn_list[random.randint(0, 8)]
+                    print(f"first{btn_list[0]}")
+                # ----------------------Game Level-------------------------------->
+
+                if random_btn['text'] == " " and clicked is False:
+                    random_btn['text'] = "O"
+                    random_btn['bg'] = "#87E5DA"
+                    clicked = True
+                    count += 1
+                    conditions()
+
         elif b['text'] == " " and clicked is False:
             b['text'] = "O"
             b['bg'] = "#87E5DA"
@@ -161,7 +295,7 @@ def game(again):
         elif btn_1['text'] == "X" and btn_5['text'] == "X" and btn_9['text'] == "X":
             winner(btn_1, btn_5, btn_9, 1)
         elif btn_3['text'] == "X" and btn_5['text'] == "X" and btn_7['text'] == "X":
-            winner(btn_3, btn_5, btn_7, 2)
+            winner(btn_3, btn_5, btn_7, 1)
         elif btn_1['text'] == "X" and btn_4['text'] == "X" and btn_7['text'] == "X":
             winner(btn_1, btn_4, btn_7, 1)
         elif btn_2['text'] == "X" and btn_5['text'] == "X" and btn_8['text'] == "X":
