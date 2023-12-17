@@ -1,18 +1,22 @@
 import tkinter
 from tkinter import messagebox
 from tkinter import *
+import pandas as pd
+import os
 
 count = 1
 clicked = True
 winner_1 = False
 winner_2 = False
 
+if not os.path.isfile("points.csv"):
+    dic = [{'player1': 0, "player2": 0}]
+    df = pd.DataFrame(dic)
+    df.to_csv("points.csv")
 
-with open("points.css", mode="r") as file_data:
-    points = file_data.read()
-
-    player1_points = int(''.join(points[0]))
-    player2_points = int(''.join(points[2]))
+df = pd.read_csv("points.csv")
+player1_points = df["player1"].item()
+player2_points = df["player2"].item()
 
 
 # _________________________Reset Points_________________________>
@@ -20,23 +24,25 @@ with open("points.css", mode="r") as file_data:
 def reset_points():
     global player1_points, player2_points
 
-    with open("points.css", mode="r") as df:
-        point = df.read()
-        print(type(point[0]))
-        if point[0] == '0' and point[2] == '0':
-            messagebox.showinfo('Tic Tak Toe', "The game is already resat")
-            return
+    dataf = pd.read_csv("points.csv")
+    point = dataf["player1"].item()
+    point2 = dataf["player2"].item()
 
-        elif messagebox.askyesno('Tic Tak Toe', "Do you really want to reset the points?"):
-            with open("points.css", mode="w") as d_file:
-                d_file.write(f"{0},{0}")
-            player1_points = 0
-            player2_points = 0
-            p1_point_lb.config(text="0")
-            p2_point_lb.config(text="0")
-            game(False)
-        else:
-            return
+    if point == 0 and point2 == 0:
+        messagebox.showinfo('Tic Tak Toe', "The game is already resat")
+        return
+
+    elif messagebox.askyesno('Tic Tak Toe', "Do you really want to reset the points?"):
+        data = [{'player1': 0, "player2": 0}]
+        csv_df = pd.DataFrame(data)
+        csv_df.to_csv("points.csv")
+        player1_points = 0
+        player2_points = 0
+        p1_point_lb.config(text="0")
+        p2_point_lb.config(text="0")
+        game(False)
+    else:
+        return
 
 
 # _________________________Game_________________________>
@@ -74,7 +80,6 @@ def game(again):
     elif again is True:
         if not messagebox.askyesno("Tik Tak Toe", "Do you really want to start over?"):
             return
-
 
     clicked = True
     count = 1
@@ -124,8 +129,9 @@ def game(again):
             player2_points += 1
             p2_point_lb.config(text=f"{player2_points}")
 
-        with open("points.css", mode="w") as file:
-            file.write(f"{player1_points},{player2_points}")
+        file_dict = [{'player1': player1_points, "player2": player2_points}]
+        file_df = pd.DataFrame(file_dict)
+        file_df.to_csv("points.csv")
 
         situation_lb.place(x=180, y=20)
         disable_buttons()
@@ -214,8 +220,8 @@ def game(again):
     btn_9 = Button(text=' ', bg="#424242", width=12, height=6, command=lambda: b_click(btn_9))
     btn_9.place(x=360, y=320)
 
-    play_btn = Button(text='Play again', bg="#CD3131", fg="#F6F6F6", command=lambda: game(again=True), font=('Elephant', 12, "normal"),
-                      padx=15)
+    play_btn = Button(text='Play again', bg="#CD3131", fg="#F6F6F6", command=lambda: game(again=True),
+                      font=('Elephant', 12, "normal"), padx=15)
     play_btn.place(x=215, y=460)
 
     reset_btn = Button(text='Reset', bg="#CD3131", fg="#F6F6F6", command=reset_points, font=('Elephant', 8, "normal"))
